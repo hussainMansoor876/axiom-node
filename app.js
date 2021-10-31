@@ -2,14 +2,14 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 
-const PORT = 8080
+const PORT = process.env.PORT || 8080
 
 app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res) => {
     try {
-        return res.send({ message: 'Hello Nodejs Server is Running!', success: true })
+        return res.send({ message: `Hello Nodejs Server is Running ${PORT}!`, success: true })
     }
     catch (e) {
         console.log('e', e)
