@@ -1,11 +1,22 @@
 const express = require('express')
 const cors = require('cors')
 const app = express()
+const { mongoose } = require('./config')
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8081
 
 app.use(express.json())
 app.use(cors())
+
+const db = mongoose.connection
+
+db.on('error', (err) => {
+    console.log('err', err)
+})
+
+db.on('open', async () => {
+    console.log('DB running!')
+})
 
 app.get('/', (req, res) => {
     try {

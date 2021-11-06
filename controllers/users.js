@@ -1,6 +1,7 @@
+const { Users } = require('../models')
+
 const AuthLogin = (req, res) => {
     try {
-        console.log('post req', req?.body)
         const { body } = req
 
         if (body?.email === 'admin@admin.com' && body?.password === 'admin') {
@@ -15,6 +16,33 @@ const AuthLogin = (req, res) => {
     }
 }
 
+const Register = (req, res) => {
+    try {
+        const { body } = req
+
+        if (!body?.email || !body?.userName || !body?.password) {
+            return res.send({ success: false, message: 'Please provide all values!' })
+        }
+
+        let user = new Users(body)
+
+        user.save()
+            .then(() => {
+                return res.send({ success: true })
+            })
+            .catch((e) => {
+                console.log('e', e)
+                return res.send({ success: false, message: e?.message })
+            })
+
+        console.log('body', body)
+    }
+    catch (e) {
+
+    }
+}
+
 module.exports = {
-    AuthLogin
+    AuthLogin,
+    Register
 }
