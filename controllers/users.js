@@ -3,7 +3,7 @@ const { Users } = require('../models')
 
 const salt = bcrypt.genSaltSync(10)
 
-const AuthLogin = (req, res) => {
+const authLogin = (req, res) => {
     try {
         const { body } = req
 
@@ -47,7 +47,7 @@ const AuthLogin = (req, res) => {
     }
 }
 
-const Register = (req, res) => {
+const register = (req, res) => {
     try {
         const { body } = req
 
@@ -71,11 +71,47 @@ const Register = (req, res) => {
         console.log('body', body)
     }
     catch (e) {
+        console.log('e', e)
+        return res.send({ message: e?.message, success: false })
+    }
+}
 
+const getUsers = (req, res) => {
+    try {
+        const { body } = req
+
+        Users.find({ 'address.zipCode': body?.zipCode }, { __v: 0, password: 0 }, (err, users) => {
+            if (err || !users?.length) {
+                return res.send({ success: false, message: 'No User Found!' })
+            }
+
+            return res.send({ success: true, users })
+        })
+
+        // Users.find({ age: { $gte: body?.age, $lte: 100 } }, { __v: 0, password: 0 }, (err, users) => {
+        //     if (err || !users?.length) {
+        //         return res.send({ success: false, message: 'No User Found!' })
+        //     }
+
+        //     return res.send({ success: true, users })
+        // })
+
+        // Users.find({ $or: [{ userName: body?.userName }, { email: body?.email }] }, { __v: 0, password: 0 }, (err, users) => {
+        //     if (err || !users?.length) {
+        //         return res.send({ success: false, message: 'No User Found!' })
+        //     }
+
+        //     return res.send({ success: true, users })
+        // })
+    }
+    catch (e) {
+        console.log('e', e)
+        return res.send({ message: e?.message, success: false })
     }
 }
 
 module.exports = {
-    AuthLogin,
-    Register
+    authLogin,
+    register,
+    getUsers
 }

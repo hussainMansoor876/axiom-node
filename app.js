@@ -2,11 +2,26 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const { mongoose } = require('./config')
+// const { Users } = require('./models')
 
 const PORT = process.env.PORT || 8081
 
 app.use(express.json())
 app.use(cors())
+
+// console.log(Math.round(Math.random() * 100) + 10)
+
+// let address = {
+//     home: '7/47 malir',
+//     zipCode: 75100,
+//     city: 'Karachi',
+//     province: 'Sindh',
+//     country: 'Pakistan'
+// }
+
+// Users.findOneAndUpdate({ age: 64 }, { address })
+//     .then(() => console.log('Success'))
+//     .catch((e) => console.log('e', e))
 
 const db = mongoose.connection
 

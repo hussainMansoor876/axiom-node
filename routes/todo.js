@@ -4,7 +4,7 @@ const { addTodo, getAll, updateTodo, deleteTodo } = require('../controllers/todo
 
 router.post('/add_todo', addTodo)
 
-router.get('/get_all', getAll)
+router.get('/get_all/:id', getAll)
 
 router.put('/update_todo', updateTodo)
 

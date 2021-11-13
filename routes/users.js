@@ -1,10 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const { AuthLogin, Register } = require('../controllers/users')
+const { authLogin, register, getUsers } = require('../controllers/users')
 
-router.post('/login', AuthLogin)
+router.post('/login', authLogin)
 
-router.post('/register', Register)
+router.post('/register', register)
+
+router.post('/get_users', getUsers)
 
 // router.post('/login', (req, res) => {
 //     try {

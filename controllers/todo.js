@@ -2,13 +2,13 @@ const { Todos } = require('../models')
 
 const addTodo = (req, res) => {
     try {
-        const task = req?.body?.task
+        const { body } = req
 
-        if (!task) {
+        if (!body?.task || !body?.userId) {
             return res.send({ success: false, message: 'Please provide task' })
         }
 
-        let todo = new Todos({ task })
+        let todo = new Todos(body)
 
         todo.save()
             .then(() => {
@@ -27,13 +27,15 @@ const addTodo = (req, res) => {
 
 const getAll = (req, res) => {
     try {
-        Todos.find({}, { __v: 0 }, (err, tasks) => {
+        const userId = req?.params?.id
+
+        Todos.find({ userId }, { __v: 0 }, (err, tasks) => {
             if (err || !tasks?.length) {
                 return res.send({ success: false, message: 'No Task Found!' })
             }
 
             return res.send({ success: true, tasks })
-        })
+        }).sort({ task: 1 })
     }
     catch (e) {
         console.log('e', e)
@@ -68,7 +70,7 @@ const deleteTodo = async (req, res) => {
         const id = req?.params?.id
 
         if (!id) {
-            return res.sendd({ success: false, message: 'Please Provide todo id!' })
+            return res.send({ success: false, message: 'Please Provide todo id!' })
         }
 
         await Todos.findByIdAndDelete(id)
