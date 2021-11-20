@@ -1,20 +1,22 @@
 const mongoose = require('mongoose')
 
+const REQUIRED_STRING = {
+    type: String,
+    required: true
+}
+
 const userSchema = new mongoose.Schema({
     userName: {
-        type: String,
-        required: true,
+        ...REQUIRED_STRING,
         trim: true,
         lowercase: true
     },
     firstName: {
-        type: String,
-        required: true,
+        ...REQUIRED_STRING,
         trim: true
     },
     lastName: {
-        type: String,
-        required: true,
+        ...REQUIRED_STRING,
         default: 'Pakistan Wala',
         trim: true
     },
@@ -22,19 +24,20 @@ const userSchema = new mongoose.Schema({
         type: Number
     },
     address: {
-        type: Object
+        home: REQUIRED_STRING,
+        zipCode: REQUIRED_STRING,
+        city: REQUIRED_STRING,
+        province: REQUIRED_STRING,
+        country: REQUIRED_STRING
     },
     email: {
-        type: String,
-        required: true,
+        ...REQUIRED_STRING,
         unique: true,
         trim: true,
         lowercase: true
     },
-    password: {
-        type: String,
-        required: true
-    },
+    userEmails: Array,
+    password: REQUIRED_STRING,
     createdAt: {
         type: Date,
         default: Date.now

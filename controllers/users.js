@@ -80,13 +80,29 @@ const getUsers = (req, res) => {
     try {
         const { body } = req
 
-        Users.find({ 'address.zipCode': body?.zipCode }, { __v: 0, password: 0 }, (err, users) => {
+        Users.find({ 'userEmails.0': body?.email }, { __v: 0, password: 0 }, (err, users) => {
             if (err || !users?.length) {
                 return res.send({ success: false, message: 'No User Found!' })
             }
 
             return res.send({ success: true, users })
         })
+
+        // Users.find({ userEmails: { $in: body?.email } }, { __v: 0, password: 0 }, (err, users) => {
+        //     if (err || !users?.length) {
+        //         return res.send({ success: false, message: 'No User Found!' })
+        //     }
+
+        //     return res.send({ success: true, users })
+        // })
+
+        // Users.find({ 'address.zipCode': body?.zipCode }, { __v: 0, password: 0 }, (err, users) => {
+        //     if (err || !users?.length) {
+        //         return res.send({ success: false, message: 'No User Found!' })
+        //     }
+
+        //     return res.send({ success: true, users })
+        // })
 
         // Users.find({ age: { $gte: body?.age, $lte: 100 } }, { __v: 0, password: 0 }, (err, users) => {
         //     if (err || !users?.length) {
@@ -110,8 +126,65 @@ const getUsers = (req, res) => {
     }
 }
 
+const addAddress = (req, res) => {
+    try {
+        const { id, address } = req?.body
+
+        Users.findByIdAndUpdate(id, { address }, (err, user) => {
+            if (err) {
+                return res.send({ success: false, message: 'Something Went Wrong!' })
+            }
+
+            return res.send({ success: true })
+        })
+    }
+    catch (e) {
+        console.log('e', e)
+        return res.send({ message: e?.message, success: false })
+    }
+}
+
+const addEmail = (req, res) => {
+    try {
+        const { id, email } = req?.body
+
+        Users.findByIdAndUpdate(id, { $push: { userEmails: email } }, (err, user) => {
+            if (err) {
+                return res.send({ success: false, message: 'Something Went Wrong!' })
+            }
+
+            return res.send({ success: true })
+        })
+    }
+    catch (e) {
+        console.log('e', e)
+        return res.send({ message: e?.message, success: false })
+    }
+}
+
+const deleteEmail = (req, res) => {
+    try {
+        const { id, email } = req?.body
+
+        Users.findByIdAndUpdate(id, { $pull: { userEmails: email } }, (err, user) => {
+            if (err) {
+                return res.send({ success: false, message: 'Something Went Wrong!' })
+            }
+
+            return res.send({ success: true })
+        })
+    }
+    catch (e) {
+        console.log('e', e)
+        return res.send({ message: e?.message, success: false })
+    }
+}
+
 module.exports = {
     authLogin,
     register,
-    getUsers
+    getUsers,
+    addAddress,
+    addEmail,
+    deleteEmail
 }
