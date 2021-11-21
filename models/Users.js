@@ -24,11 +24,11 @@ const userSchema = new mongoose.Schema({
         type: Number
     },
     address: {
-        home: REQUIRED_STRING,
-        zipCode: REQUIRED_STRING,
-        city: REQUIRED_STRING,
-        province: REQUIRED_STRING,
-        country: REQUIRED_STRING
+        home: String,
+        zipCode: String,
+        city: String,
+        province: String,
+        country: String
     },
     email: {
         ...REQUIRED_STRING,
